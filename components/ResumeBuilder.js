@@ -247,11 +247,10 @@ export default function ResumeBuilder() {
                 />
                 {errors.email && <p className="text-[11.5px] text-warn mt-1">{errors.email}</p>}
               </Field>
-
-              <Field label="Phone *" className="flex-1 min-w-[140px]">
-                <div className="flex gap-2 w-full min-w-0">
+<Field label="Phone *" className="flex-1 min-w-[140px]">
+                <div className="flex gap-2">
                   <select
-                    className={`${inputClass()} flex-none w-[92px] sm:w-[112px] px-1.5 sm:px-2.5`}
+                    className="flex-none basis-[90px] sm:basis-[112px] shrink-0 border-2 border-line rounded-lg px-1.5 sm:px-2.5 py-3 text-[13px] sm:text-[14.5px] bg-[#FCFCFB] focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/15 focus:bg-white"
                     value={personal.countryCode}
                     onChange={(e) => updatePersonal("countryCode", e.target.value)}
                   >
@@ -262,7 +261,9 @@ export default function ResumeBuilder() {
                     ))}
                   </select>
                   <input
-                    className={`${inputClass(errors.phone)} flex-1 min-w-0`}
+                    className={`flex-1 min-w-0 border-2 rounded-lg px-3.5 py-3 text-[14.5px] bg-[#FCFCFB] transition-colors focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/15 focus:bg-white ${
+                      errors.phone ? "border-warn bg-warnsoft" : "border-line"
+                    }`}
                     placeholder="3001234567"
                     inputMode="numeric"
                     value={personal.phone}
