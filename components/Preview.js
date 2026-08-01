@@ -1,101 +1,49 @@
 "use client";
 
-import { structureText, cleanBulletField, cleanSkillsLine } from "@/lib/richtext";
-
-function Runs({ runs }) {
-  return (
-    <>
-      {runs.map((r, i) => (
-        <span key={i} style={r.bold ? { fontWeight: 700 } : undefined}>
-          {r.text}
-          {i < runs.length - 1 ? " " : ""}
-        </span>
-      ))}
-    </>
-  );
-}
-
-function RichText({ text }) {
-  const blocks = structureText(text);
-  if (!blocks.length) return null;
-  return (
-    <>
-      {blocks.map((b, i) => {
-        if (b.type === "bullet") {
-          return (
-            <ul key={i} className="ml-[18px] mt-1 mb-1 list-disc">
-              <li className="mb-0.5">
-                <Runs runs={b.runs} />
-              </li>
-            </ul>
-          );
-        }
-        if (b.type === "heading") {
-          return (
-            <div key={i} className="font-bold mt-1.5 mb-0.5">
-              <Runs runs={b.runs} />
-            </div>
-          );
-        }
-        return (
-          <div key={i} className="mb-1">
-            <Runs runs={b.runs} />
-          </div>
-        );
-      })}
-    </>
-  );
-}
-
-function BulletField({ text }) {
-  const items = cleanBulletField(text);
-  if (!items.length) return null;
-  return (
-    <ul className="ml-[18px] mt-1 list-disc">
-      {items.map((runs, i) => (
-        <li key={i} className="mb-0.5">
-          <Runs runs={runs} />
-        </li>
-      ))}
-    </ul>
-  );
-}
+import { cleanSkills, parseFreeText, cleanBulletLines } from "@/lib/textFormat";
 
 export default function Preview({ personal, experience, education, projects, certs }) {
   const fullPhone = personal.phone ? `${personal.countryCode} ${personal.phone}` : "";
   const contactLine = [fullPhone, personal.email, personal.location, personal.linkedin]
     .filter(Boolean)
     .join("   |   ");
-  const skillsLine = cleanSkillsLine(personal.skills);
+
+  const summaryParsed = parseFreeText(personal.summary);
+  const skillsClean = cleanSkills(personal.skills);
 
   return (
     <div
       id="resume-preview"
-      className="bg-white w-full max-w-[640px] min-h-[800px] shadow-[0_8px_30px_rgba(20,33,61,0.12)] ring-1 ring-black/5 rounded-lg px-6 py-8 sm:px-10 sm:py-10 transition-shadow duration-300"
-      style={{ fontFamily: '"Times New Roman", Times, serif', color: "#1a1a1a", fontSize: 13.5, lineHeight: 1.55 }}
+      className="bg-white w-full max-w-[640px] min-h-[800px] shadow-[0_2px_18px_rgba(20,33,61,0.08)] px-6 py-8 sm:px-10 sm:py-10"
+      style={{ fontFamily: "'Times New Roman', Times, serif", color: "#1a1a1a", fontSize: 14, lineHeight: 1.55 }}
     >
-      <div className="text-[23px] font-bold mb-0.5 break-words">{personal.fullName || "Your Name"}</div>
-      {personal.jobTitle && <div className="text-[14px] text-[#3B4A6B] mb-2">{personal.jobTitle}</div>}
-      {contactLine && <div className="text-[11.5px] text-[#3B4A6B] mb-4 break-words">{contactLine}</div>}
+      <div className="text-[24px] font-bold mb-0.5 break-words">{personal.fullName || "Your Name"}</div>
+      {personal.jobTitle && <div className="text-[15px] text-[#333] mb-2">{personal.jobTitle}</div>}
+      {contactLine && <div className="text-[12px] text-[#333] mb-4 break-words">{contactLine}</div>}
 
       {personal.summary && (
         <Section title="Summary">
-          <RichText text={personal.summary} />
+          <FreeText parsed={summaryParsed} />
         </Section>
       )}
 
-      {skillsLine && (
+      {skillsClean && (
         <Section title="Skills">
-          <div>{skillsLine}</div>
+          <div>{skillsClean}</div>
         </Section>
       )}
 
       {experience.length > 0 && (
         <Section title="Experience">
           {experience.map((e) => (
-            <Entry key={e.id} head={e.title} headRight={e.start} sub={e.company} subRight={e.location}>
-              <BulletField text={e.bullets} />
-            </Entry>
+            <Entry
+              key={e.id}
+              head={e.title}
+              headRight={e.start}
+              sub={e.company}
+              subRight={e.location}
+              bullets={cleanBulletLines(e.bullets)}
+            />
           ))}
         </Section>
       )}
@@ -103,9 +51,7 @@ export default function Preview({ personal, experience, education, projects, cer
       {projects.length > 0 && (
         <Section title="Projects">
           {projects.map((p) => (
-            <Entry key={p.id} head={p.name} headRight={p.tech}>
-              {p.description && <RichText text={p.description} />}
-            </Entry>
+            <ProjectEntry key={p.id} name={p.name} tech={p.tech} description={p.description} />
           ))}
         </Section>
       )}
@@ -129,29 +75,66 @@ export default function Preview({ personal, experience, education, projects, cer
   );
 }
 
+function FreeText({ parsed }) {
+  if (!parsed || (!parsed.text && (!parsed.items || parsed.items.length === 0))) return null;
+  if (parsed.mode === "bullets") {
+    return (
+      <ul className="ml-[18px] list-disc">
+        {parsed.items.map((item, i) => (
+          <li key={i} className="mb-0.5">
+            {item}
+          </li>
+        ))}
+      </ul>
+    );
+  }
+  return <div>{parsed.text}</div>;
+}
+
 function Section({ title, children }) {
   return (
     <div className="mb-4">
-      <h3 className="text-[12.5px] uppercase tracking-wide border-b-[1.5px] border-[#1a1a1a] pb-1 mb-2">{title}</h3>
+      <h3 className="text-[13px] uppercase tracking-wide border-b-[1.5px] border-[#1a1a1a] pb-1 mb-2">{title}</h3>
       {children}
     </div>
   );
 }
 
-function Entry({ head, headRight, sub, subRight, children }) {
+function Entry({ head, headRight, sub, subRight, bullets }) {
   return (
     <div className="mb-2.5">
-      <div className="flex justify-between flex-wrap gap-1 font-bold text-[13.5px]">
+      <div className="flex justify-between flex-wrap gap-1 font-bold text-[14px]">
         <span>{head}</span>
         <span>{headRight}</span>
       </div>
       {(sub || subRight) && (
-        <div className="flex justify-between flex-wrap gap-1 italic text-[12px] text-[#3B4A6B] mb-0.5">
+        <div className="flex justify-between flex-wrap gap-1 italic text-[13px] text-[#333] mb-0.5">
           <span>{sub}</span>
           <span>{subRight}</span>
         </div>
       )}
-      {children}
+      {bullets && bullets.length > 0 && (
+        <ul className="ml-[18px] mt-1 list-disc">
+          {bullets.map((b, i) => (
+            <li key={i} className="mb-0.5">
+              {b}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function ProjectEntry({ name, tech, description }) {
+  const parsed = parseFreeText(description);
+  return (
+    <div className="mb-2.5">
+      <div className="flex justify-between flex-wrap gap-1 font-bold text-[14px]">
+        <span>{name}</span>
+        <span>{tech}</span>
+      </div>
+      <FreeText parsed={parsed} />
     </div>
   );
 }
