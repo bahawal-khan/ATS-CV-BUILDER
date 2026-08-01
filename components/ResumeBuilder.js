@@ -202,26 +202,23 @@ export default function ResumeBuilder() {
     <div className="min-h-screen">
       <Toast toasts={toasts} />
 
-      <header className="px-4 sm:px-8 py-7 sm:py-8 border-b border-line bg-gradient-to-r from-white via-white to-indigosoft/60 relative overflow-hidden">
-        <div className="absolute -top-10 -right-10 w-52 h-52 rounded-full bg-gradient-to-br from-indigo/10 to-violet/10 blur-2xl pointer-events-none" />
-        <div className="max-w-[1400px] mx-auto relative">
-          <div className="inline-flex items-center gap-1.5 bg-indigosoft text-indigo text-[11px] font-semibold px-2.5 py-1 rounded-full mb-2.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo animate-pulse" />
-            Parser-safe formatting
-          </div>
-          <h1 className="font-display text-[22px] sm:text-[26px] font-bold mb-1.5 tracking-tight text-ink">ATS Resume Builder</h1>
-          <p className="text-muted text-[13px] sm:text-[14px] m-0 max-w-2xl">
-            Fill in your details — get a plain, parser-safe resume. No tables, no icons, no columns — just what applicant tracking systems can actually read.
-          </p>
-        </div>
+      <header className="px-4 sm:px-8 py-6 border-b border-line bg-paper">
+        <h1 className="font-display text-[19px] sm:text-[22px] font-bold mb-1 tracking-tight">ATS Resume Builder</h1>
+        <p className="text-muted text-[12.5px] sm:text-[13.5px] m-0">
+          Fill in your details — get a plain, parser-safe resume. No tables, no icons, no columns — just what applicant tracking systems can actually read.
+        </p>
       </header>
 
-      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_300px_580px] gap-x-5">
+      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_280px] xl:grid-cols-[1fr_280px_560px]">
         {/* FORM */}
-        <div className="p-4 sm:p-6 lg:max-h-[calc(100vh-104px)] lg:overflow-y-auto scroll-thin order-1 space-y-4">
-          <Card accent="indigo" title="Contact" icon="👤">
-            <div className="flex flex-wrap gap-3">
-              <Field label="Full Name *" className="flex-1 min-w-[160px]">
+        <div className="p-4 sm:p-5 lg:max-h-[calc(100vh-96px)] lg:overflow-y-auto order-1">
+          <div className="bg-paper border border-line border-l-4 border-l-[#3B82F6] rounded-xl p-4 mb-3.5">
+            <SectionHeading icon="👤" color="#3B82F6" bg="#DBEAFE">
+              Contact
+            </SectionHeading>
+
+            <div className="flex flex-wrap gap-2.5">
+              <Field label="Full Name *" className="flex-1 min-w-[140px]">
                 <input
                   className={inputClass(errors.fullName)}
                   placeholder="Ayesha Khan"
@@ -229,7 +226,7 @@ export default function ResumeBuilder() {
                   onChange={(e) => updatePersonal("fullName", e.target.value)}
                 />
               </Field>
-              <Field label="Target Job Title" className="flex-1 min-w-[160px]">
+              <Field label="Target Job Title" className="flex-1 min-w-[140px]">
                 <input
                   className={inputClass()}
                   placeholder="Data Analyst"
@@ -239,8 +236,8 @@ export default function ResumeBuilder() {
               </Field>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <Field label="Email * (must be a gmail.com address)" className="flex-1 min-w-[220px]">
+            <div className="flex flex-wrap gap-2.5">
+              <Field label="Email * (must be a gmail.com address)" className="flex-1 min-w-[140px]">
                 <input
                   className={inputClass(errors.email)}
                   placeholder="ayesha@gmail.com"
@@ -251,10 +248,10 @@ export default function ResumeBuilder() {
                 {errors.email && <p className="text-[11.5px] text-warn mt-1">{errors.email}</p>}
               </Field>
 
-              <Field label="Phone *" className="flex-1 min-w-[220px]">
-                <div className="flex gap-2">
+              <Field label="Phone *" className="flex-1 min-w-[140px]">
+                <div className="flex gap-2 w-full min-w-0">
                   <select
-                    className={`${inputClass()} flex-none w-[104px] sm:w-[122px] shrink-0 px-1.5 sm:px-2.5`}
+                    className={`${inputClass()} flex-none w-[92px] sm:w-[112px] px-1.5 sm:px-2.5`}
                     value={personal.countryCode}
                     onChange={(e) => updatePersonal("countryCode", e.target.value)}
                   >
@@ -277,8 +274,8 @@ export default function ResumeBuilder() {
               </Field>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <Field label="Location" className="flex-1 min-w-[160px]">
+            <div className="flex flex-wrap gap-2.5">
+              <Field label="Location" className="flex-1 min-w-[140px]">
                 <input
                   className={inputClass()}
                   placeholder="Karachi, Pakistan"
@@ -286,7 +283,7 @@ export default function ResumeBuilder() {
                   onChange={(e) => updatePersonal("location", e.target.value)}
                 />
               </Field>
-              <Field label="LinkedIn / Portfolio" className="flex-1 min-w-[160px]">
+              <Field label="LinkedIn / Portfolio" className="flex-1 min-w-[140px]">
                 <input
                   className={inputClass()}
                   placeholder="linkedin.com/in/ayesha"
@@ -295,31 +292,38 @@ export default function ResumeBuilder() {
                 />
               </Field>
             </div>
-          </Card>
+          </div>
 
-          <Card accent="violet" title="Professional Summary" icon="📝">
+          <div className="bg-paper border border-line border-l-4 border-l-[#8B5CF6] rounded-xl p-4 mb-3.5">
+            <SectionHeading icon="📝" color="#8B5CF6" bg="#EDE9FE">
+              Professional Summary
+            </SectionHeading>
             <textarea
-              className={`${inputClass()} min-h-[90px] resize-y`}
+              className={`${inputClass()} min-h-[70px] resize-y`}
               placeholder="2-3 lines: who you are, key strengths, what you're aiming for."
               value={personal.summary}
               onChange={(e) => updatePersonal("summary", e.target.value)}
             />
-          </Card>
+          </div>
 
-          <Card accent="sky" title="Skills" icon="🛠️">
+          <div className="bg-paper border border-line border-l-4 border-l-[#14B8A6] rounded-xl p-4 mb-3.5">
+            <SectionHeading icon="🛠" color="#14B8A6" bg="#CCFBF1">
+              Skills
+            </SectionHeading>
             <textarea
-              className={`${inputClass()} min-h-[76px] resize-y`}
+              className={`${inputClass()} min-h-[60px] resize-y`}
               placeholder="Python, SQL, Excel, Power BI, Machine Learning (comma-separated)"
               value={personal.skills}
               onChange={(e) => updatePersonal("skills", e.target.value)}
             />
-            <p className="text-[11.5px] text-muted mt-1.5">Comma-separated. Use exact keywords from the job description where true.</p>
-          </Card>
+            <p className="text-[11.5px] text-muted mt-1">Comma-separated. Use exact keywords from the job description where true.</p>
+          </div>
 
           <ListSection
             title="Experience"
-            accent="accent"
             icon="💼"
+            color="#F59E0B"
+            bg="#FEF3C7"
             items={experience}
             fields={EXPERIENCE_FIELDS}
             onAdd={expHandlers.add}
@@ -329,8 +333,9 @@ export default function ResumeBuilder() {
           />
           <ListSection
             title="Education"
-            accent="amber"
             icon="🎓"
+            color="#EC4899"
+            bg="#FCE7F3"
             items={education}
             fields={EDUCATION_FIELDS}
             onAdd={eduHandlers.add}
@@ -340,8 +345,9 @@ export default function ResumeBuilder() {
           />
           <ListSection
             title="Projects"
-            accent="rose"
             icon="🚀"
+            color="#6366F1"
+            bg="#E0E7FF"
             items={projects}
             fields={PROJECT_FIELDS}
             onAdd={projHandlers.add}
@@ -351,8 +357,9 @@ export default function ResumeBuilder() {
           />
           <ListSection
             title="Certifications"
-            accent="indigo"
-            icon="🏆"
+            icon="🏅"
+            color="#10B981"
+            bg="#D1FAE5"
             items={certs}
             fields={CERT_FIELDS}
             onAdd={certHandlers.add}
@@ -363,15 +370,15 @@ export default function ResumeBuilder() {
         </div>
 
         {/* CHECKLIST + DOWNLOADS */}
-        <div className="p-4 sm:p-6 lg:sticky lg:top-0 lg:max-h-screen lg:overflow-y-auto scroll-thin order-2 space-y-4">
+        <div className="p-4 sm:p-5 lg:sticky lg:top-0 lg:max-h-screen lg:overflow-y-auto order-2">
           <Checklist personal={personal} experience={experience} education={education} projects={projects} />
 
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2 mt-4">
             <button
               type="button"
               disabled={isExporting}
               onClick={handleDownloadPdf}
-              className="font-display font-semibold text-[13.5px] rounded-xl py-3.5 bg-gradient-to-r from-ink to-indigo text-white hover:opacity-95 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 disabled:opacity-50 disabled:translate-y-0 flex items-center justify-center gap-2"
+              className="font-display font-semibold text-[13px] rounded-lg py-3 bg-ink text-white hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-1.5"
             >
               ⬇ Download PDF
             </button>
@@ -379,7 +386,7 @@ export default function ResumeBuilder() {
               type="button"
               disabled={isExporting}
               onClick={handleDownloadWord}
-              className="font-display font-semibold text-[13.5px] rounded-xl py-3.5 bg-gradient-to-r from-accent to-sky text-white hover:opacity-95 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 disabled:opacity-50 disabled:translate-y-0 flex items-center justify-center gap-2"
+              className="font-display font-semibold text-[13px] rounded-lg py-3 bg-accent text-white hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-1.5"
             >
               ⬇ Download Word (.docx)
             </button>
@@ -388,14 +395,14 @@ export default function ResumeBuilder() {
           <button
             type="button"
             onClick={loadSample}
-            className="w-full border border-line rounded-xl py-3 text-[12.5px] font-medium text-muted hover:bg-paper hover:border-indigo/40 hover:text-indigo"
+            className="mt-2.5 w-full border border-line rounded-lg py-2.5 text-[12px] text-muted hover:bg-paper"
           >
             Load sample data
           </button>
         </div>
 
         {/* PREVIEW */}
-        <div className="p-4 sm:p-6 flex justify-center order-3 xl:order-3 col-span-1 lg:col-span-2 xl:col-span-1">
+        <div className="p-4 sm:p-5 flex justify-center order-3 xl:order-3 col-span-1 lg:col-span-2 xl:col-span-1">
           <Preview personal={personal} experience={experience} education={education} projects={projects} certs={certs} />
         </div>
       </div>
@@ -403,45 +410,33 @@ export default function ResumeBuilder() {
   );
 }
 
-const ACCENTS = {
-  indigo: { text: "text-indigo", bg: "bg-indigosoft", border: "border-l-indigo" },
-  violet: { text: "text-violet", bg: "bg-violetsoft", border: "border-l-violet" },
-  sky: { text: "text-sky", bg: "bg-skysoft", border: "border-l-sky" },
-  accent: { text: "text-accent", bg: "bg-accentsoft", border: "border-l-accent" },
-  amber: { text: "text-amber", bg: "bg-ambersoft", border: "border-l-amber" },
-  rose: { text: "text-rose", bg: "bg-rosesoft", border: "border-l-rose" },
-};
-
-export function Card({ accent = "indigo", title, icon, children }) {
-  const c = ACCENTS[accent] || ACCENTS.indigo;
+function SectionHeading({ icon, color, bg, children }) {
   return (
-    <div
-      className={`bg-paper border border-line ${c.border} border-l-4 rounded-2xl p-5 shadow-card hover:shadow-cardHover transition-shadow duration-300 animate-fadeInUp space-y-3`}
-    >
-      <div className="flex items-center gap-2">
-        <span className={`w-7 h-7 rounded-lg ${c.bg} flex items-center justify-center text-[14px]`}>{icon}</span>
-        <h2 className={`font-display text-[13.5px] uppercase tracking-wider ${c.text}`}>{title}</h2>
-      </div>
-      {children}
+    <div className="flex items-center gap-2.5 mb-3.5">
+      <span
+        className="w-8 h-8 rounded-lg flex items-center justify-center text-[15px] flex-none"
+        style={{ background: bg }}
+      >
+        {icon}
+      </span>
+      <h2 className="font-display text-[13.5px] uppercase tracking-wider m-0" style={{ color }}>
+        {children}
+      </h2>
     </div>
   );
 }
 
-export function accentClasses(accent) {
-  return ACCENTS[accent] || ACCENTS.indigo;
-}
-
 function Field({ label, className, children }) {
   return (
-    <div className={`mb-1 ${className || ""}`}>
-      <label className="block text-[12px] font-semibold text-inksoft mb-1.5">{label}</label>
+    <div className={`mb-3 ${className || ""}`}>
+      <label className="block text-[12px] font-semibold text-inksoft mb-1">{label}</label>
       {children}
     </div>
   );
 }
 
 function inputClass(error) {
-  return `w-full border rounded-lg px-3 py-2.5 text-[13.5px] bg-[#FCFCFD] focus:outline-none focus:border-indigo focus:ring-2 focus:ring-indigo/15 focus:bg-white ${
+  return `w-full border-2 rounded-lg px-3.5 py-3 text-[14.5px] bg-[#FCFCFB] transition-colors focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/15 focus:bg-white ${
     error ? "border-warn bg-warnsoft" : "border-line"
   }`;
 }
