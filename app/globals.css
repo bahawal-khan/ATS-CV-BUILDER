@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+}
+
+/* Smooth, consistent transitions across interactive elements */
+input,
+select,
+textarea,
+button {
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, transform 0.12s ease,
+    opacity 0.18s ease;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* Custom scrollbar for the scrollable form/checklist columns */
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: #d3d8ea;
+  border-radius: 999px;
+}
+.scroll-thin::-webkit-scrollbar-thumb:hover {
+  background: #b7bede;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #resume-preview,
+  #resume-preview * {
+    visibility: visible;
+  }
+  #resume-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
